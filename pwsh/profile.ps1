@@ -20,6 +20,59 @@ function Resolve-Error ($ErrorRecord=$Error[0])
 function modulize {
     Get-ChildItem -Recurse *.psm1 | Import-Module -Force
 }
+
+function Test-IsPSSession {
+    return $null -ne $PSSenderInfo
+}
+
+function Test-IsSshEnvironment {
+    return (
+        -not [string]::IsNullOrEmpty($env:SSH_CONNECTION) -or
+        -not [string]::IsNullOrEmpty($env:SSH_CLIENT) -or
+        -not [string]::IsNullOrEmpty($env:SSH_TTY)
+    )
+}
+
+function Test-IsSshdAncestor {
+    try {
+        $currentPid = $PID
+        while ($currentPid -and $currentPid -ne 0) {
+            $proc = Get-Process -Id $currentPid -ErrorAction SilentlyContinue
+            if (-not $proc) { break }
+            if ($proc.ProcessName -eq 'sshd') { return $true }
+            # Defensive check: If Parent is null or Id is 0, stop loop
+            if (-not $proc.Parent -or $proc.Parent.Id -eq 0) { break }
+            $currentPid = $proc.Parent.Id
+        }
+    }
+    catch {
+        # Suppress errors, return false if any exception occurs
+    }
+    return $false
+}
+
+if ( (Test-IsPSSession) -or (Test-IsSshEnvironment) -or (Test-IsSshdAncestor) ) {
+    $global:IS_REMOTE = $true
+}
+else {
+    $global:IS_REMOTE = $false
+}
+
+function Prompt {
+    $user = [System.Environment]::UserName
+    $path = $executionContext.SessionState.Path.CurrentLocation.Path
+    $promptSymbol = '>' * ($nestedPromptLevel + 1)
+
+    if ($global:IS_REMOTE) {
+        $hostName = [System.Environment]::MachineName
+        $promptString = "${user}@${hostName} ${path}${promptSymbol} "
+    }
+    else {
+        $promptString = "${user} ${path}${promptSymbol} "
+    }
+
+    return $promptString
+}
 #endregion
 #region App options and aliases
 if (Get-Command "batcat" -ErrorAction Ignore) {
