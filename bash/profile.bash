@@ -1,8 +1,29 @@
 #shellcheck shell=bash
-IS_REMOTE=0
 
-if pstree -p | grep -qE "sshd.*\($$\)"; then
+# Do nothing if not running interactively
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+is_remote() {
+  local pid=$$
+
+  while [ "$pid" -ne 1 ]; do
+    local name
+    name=$(ps -p "$pid" -o comm=)
+    if [ "$name" = "sshd" ]; then
+      return 0
+    fi
+    pid=$(ps -p "$pid" -o ppid=)
+  done
+  return 1
+}
+
+if is_remote; then
   IS_REMOTE=1
+else
+  IS_REMOTE=0
 fi
 
 if (( IS_REMOTE )); then
