@@ -8,15 +8,18 @@ esac
 
 is_remote() {
   local pid=$$
+  local name ppid
 
   while [ "$pid" -ne 1 ]; do
-    local name
-    name=$(ps -p "$pid" -o comm=)
+    name=$(ps -p "$pid" -o comm | tail -n +2 2>/dev/null)
     if [ "$name" = "sshd" ]; then
       return 0
     fi
-    pid=$(ps -p "$pid" -o ppid=)
+    ppid=$(ps -p "$pid" -o ppid | tail -n +2 2>/dev/null)
+    [ -z "$ppid" ] && break
+    pid=$ppid
   done
+
   return 1
 }
 
