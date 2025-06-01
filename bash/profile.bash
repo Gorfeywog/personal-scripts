@@ -1,10 +1,11 @@
 #shellcheck shell=bash
-IS_REMOTE=false
-if pstree -p | grep -E --quiet --extended-regexp ".*sshd.*\($$\)"; then
-  IS_REMOTE=true
+IS_REMOTE=0
+
+if pstree -p | grep -qE "sshd.*\($$\)"; then
+  IS_REMOTE=1
 fi
 
-if [ "$IS_REMOTE" ]; then
+if (( IS_REMOTE )); then
   title="\u@\h: \w"
   prompt_core="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
 else
