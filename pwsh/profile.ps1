@@ -20,7 +20,8 @@ function Resolve-Error ($ErrorRecord=$Error[0])
 function modulize {
     Get-ChildItem -Recurse *.psm1 | Import-Module -Force
 }
-
+#endregion
+#region Prompt
 function Test-IsPSSession {
     return $null -ne $PSSenderInfo
 }
@@ -83,6 +84,10 @@ if (Get-Command lsd -ErrorAction Ignore) {
 }
 if (Get-Command less -ErrorAction Ignore) {
     $env:LESS = '--mouse'
+}
+if (Get-Command "rg" -ErrorAction Ignore) {
+    $rgConfigFile = "$PSScriptRoot/../config/.ripgreprc"
+    $env:RIPGREP_CONFIG_PATH = $rgConfigFile.FullName
 }
 #endregion
 #region Extensibility
