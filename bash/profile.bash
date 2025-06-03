@@ -5,7 +5,14 @@ case $- in
         *i*) ;;
             *) return;;
 esac
-
+#region General alises / functions
+get_parent_dir() {
+    local path="$1"
+    cd "$(dirname "$path")" >/dev/null 2>&1 && pwd
+}
+SCRIPT_DIR="$(get_parent_dir "${BASH_SOURCE[0]}")"
+#endregion
+#region Prompt
 is_remote() {
     # Short circuit if possible
     if [[ -n $SSH_CONNECTION || -n $SSH_CLIENT || -n $SSH_TTY ]]; then
@@ -49,3 +56,13 @@ else
 fi
 
 export PS1="\[\e]0;${title}\a\]${debian_chroot:+($debian_chroot)}${prompt_core}\\$ "
+#endregion
+#region App options and aliases
+if command -v batcat >/dev/null 2>&1; then
+    alias bat='batcat'
+fi
+if command -v rg >/dev/null 2>&1; then
+    rgConfigFile="$(realpath "$SCRIPT_DIR/../config/.ripgreprc")"
+    export RIPGREP_CONFIG_PATH="$rgConfigFile"
+fi
+#endregion

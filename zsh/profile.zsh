@@ -3,7 +3,13 @@ setopt interactivecomments
 if [[ ! -o interactive ]]; then
     return
 fi
-
+get_parent_dir() {
+    local path="$1"
+    cd "$(dirname "$path")" >/dev/null 2>&1 && pwd
+}
+SCRIPT_DIR="$(get_parent_dir "${(%):-%x}")" # look into ${0:a:h}, unclear what difference is
+#endregion
+#region Prompt
 function is_remote() {
     # Short circuit if possible
     if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
@@ -45,3 +51,13 @@ else
 fi
 
 PROMPT="%{$(print -Pn '\e]0;'${title}'\a')%}${prompt_core}%# "
+#endregion
+#region App options and aliases
+if command -v batcat >/dev/null 2>&1; then
+    alias bat='batcat'
+fi
+if command -v rg >/dev/null 2>&1; then
+    rgConfigFile="$(realpath "$SCRIPT_DIR/../config/.ripgreprc")"
+    export RIPGREP_CONFIG_PATH="$rgConfigFile"
+fi
+#endregion
