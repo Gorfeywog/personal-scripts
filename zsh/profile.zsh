@@ -61,3 +61,9 @@ if command -v rg >/dev/null 2>&1; then
     export RIPGREP_CONFIG_PATH="$rgConfigFile"
 fi
 #endregion
+#region Late commands
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+    alias cd='z'
+fi
+#endregion

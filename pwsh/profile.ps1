@@ -86,8 +86,9 @@ if (Get-Command less -ErrorAction Ignore) {
     $env:LESS = '--mouse'
 }
 if (Get-Command "rg" -ErrorAction Ignore) {
-    $rgConfigFile = "$PSScriptRoot/../config/.ripgreprc"
-    $env:RIPGREP_CONFIG_PATH = $rgConfigFile.FullName
+    #-AdditionalChildPath would be cleaner, but isn't supported in PowerShell 5.1
+    $rgConfigFile = Join-Path -Path $PSScriptRoot -ChildPath ".." | Join-Path -ChildPath "config" | Join-Path -ChildPath ".ripgreprc"
+    $env:RIPGREP_CONFIG_PATH = (Get-Item $rgConfigFile).FullName
 }
 #endregion
 #region Extensibility
