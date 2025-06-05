@@ -7,7 +7,7 @@ get_parent_dir() {
     local path="$1"
     cd "$(dirname "$path")" >/dev/null 2>&1 && pwd
 }
-SCRIPT_DIR="$(get_parent_dir "${(%):-%x}")" # look into ${0:a:h}, unclear what difference is
+SCRIPT_DIR="${0:a:h}"
 #endregion
 #region Prompt
 function is_remote() {
