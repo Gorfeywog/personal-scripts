@@ -88,7 +88,7 @@ if (Get-Command less -ErrorAction Ignore) {
 if (Get-Command "rg" -ErrorAction Ignore) {
     #-AdditionalChildPath would be cleaner, but isn't supported in PowerShell 5.1
     $rgConfigFile = Join-Path -Path $PSScriptRoot -ChildPath ".." | Join-Path -ChildPath "config" | Join-Path -ChildPath ".ripgreprc"
-    $env:RIPGREP_CONFIG_PATH = (Get-Item $rgConfigFile).FullName
+    $env:RIPGREP_CONFIG_PATH = (Get-Item -Force $rgConfigFile).FullName
 }
 #endregion
 #region Extensibility
