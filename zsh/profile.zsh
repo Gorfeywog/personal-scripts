@@ -8,6 +8,10 @@ get_parent_dir() {
     cd "$(dirname "$path")" >/dev/null 2>&1 && pwd
 }
 SCRIPT_DIR="${0:a:h}"
+#region General options
+bindkey $terminfo[kLFT5] backward-word
+bindkey $terminfo[kRIT5] forward-word
+#endregion
 #endregion
 #region Prompt
 function is_remote() {
