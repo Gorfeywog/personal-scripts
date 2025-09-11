@@ -58,11 +58,15 @@ fi
 export PS1="\[\e]0;${title}\a\]${debian_chroot:+($debian_chroot)}${prompt_core}\\$ "
 #endregion
 #region App options and aliases
+configRoot="$(realpath "$SCRIPT_DIR/../config/")"
 if command -v batcat >/dev/null 2>&1; then
     alias bat='batcat'
 fi
+if command -v lsd >/dev/null 2>&1; then
+    alias lla='lsd -lah'
+fi
 if command -v rg >/dev/null 2>&1; then
-    rgConfigFile="$(realpath "$SCRIPT_DIR/../config/.ripgreprc")"
+    rgConfigFile="$configRoot/.ripgreprc"
     export RIPGREP_CONFIG_PATH="$rgConfigFile"
 fi
 #endregion
