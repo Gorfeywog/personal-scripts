@@ -76,18 +76,18 @@ function Prompt {
 }
 #endregion
 #region App options and aliases
+$configRoot = Join-Path -Path $PSScriptRoot -ChildPath ".." | Join-Path -ChildPath "config"
 if (Get-Command "batcat" -ErrorAction Ignore) {
     Set-Alias -Name:bat -Value:"batcat"
 }
-if (Get-Command lsd -ErrorAction Ignore) {
+if (Get-Command "lsd" -ErrorAction Ignore) {
     function lla { lsd -lah $args }
 }
-if (Get-Command less -ErrorAction Ignore) {
+if (Get-Command "less" -ErrorAction Ignore) {
     $env:LESS = '--mouse'
 }
 if (Get-Command "rg" -ErrorAction Ignore) {
-    #-AdditionalChildPath would be cleaner, but isn't supported in PowerShell 5.1
-    $rgConfigFile = Join-Path -Path $PSScriptRoot -ChildPath ".." | Join-Path -ChildPath "config" | Join-Path -ChildPath ".ripgreprc"
+    $rgConfigFile = Join-Path -Path $configRoot -ChildPath ".ripgreprc"
     $env:RIPGREP_CONFIG_PATH = (Get-Item -Force $rgConfigFile).FullName
 }
 #endregion
