@@ -1,0 +1,42 @@
+[alias]
+    logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    ll = logline
+    fp = push --force-with-lease
+    branch-status = "!f() { \
+        branch_name=$(git rev-parse --abbrev-ref --verify --quiet \"${1}\"); \
+        if [ -z \"${branch_name}\" ]; then \
+            return 0; \
+        fi; \
+        counts=$(git rev-list --left-right --count \"${branch_name}...HEAD\"); \
+        behind=$(echo \"$counts\" | cut -f1); \
+        ahead=$(echo \"$counts\" | cut -f2); \
+        if [ \"$ahead\" -eq 0 ] && [ \"$behind\" -eq 0 ]; then \
+            echo \"Your branch is up to date with '$branch_name'\"; \
+            return 0; \
+        fi; \
+        echo \"Your branch is $ahead commits ahead and $behind commits behind '$branch_name'\"; \
+    }; f"
+    full-status = "!f() { \
+        current_branch=$(git branch --show-current); \
+        if [ -z \"$current_branch\" ]; then \
+            echo \"Detached HEAD.\"; \
+        else \
+            echo \"On branch $current_branch\"; \
+            upstream_branch=$(git rev-parse --abbrev-ref --verify --quiet @{upstream}); \
+            if [ ! -z \"$upstream_branch\" ]; then \
+                git branch-status \"$upstream_branch\"; \
+            else \
+                echo \"No upstream branch set. Consider setting one with 'git branch --set-upstream-to=origin/branch-name'.\"; \
+            fi; \
+            push_branch=$(git rev-parse --abbrev-ref --verify --quiet @{push}); \
+            if [ \"$push_branch\" = \"$upstream_branch\" ]; then \
+                echo \"Push branch is the same as upstream branch.\"; \
+            elif [ ! -z \"$push_branch\" ]; then \
+                git branch-status \"$push_branch\"; \
+            else \
+                echo \"No push branch configured.\"; \
+            fi; \
+        fi; \
+        git status --short; \
+    }; f"
+    s = full-status
