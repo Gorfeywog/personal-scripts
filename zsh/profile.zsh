@@ -70,6 +70,12 @@ if command -v rg >/dev/null 2>&1; then
     rgConfigFile="$configRoot/.ripgreprc"
     export RIPGREP_CONFIG_PATH="$rgConfigFile"
 fi
+
+if command -v micro >/dev/null 2>&1; then
+    export EDITOR='micro'
+elif command -v nano >/dev/null 2>&1; then
+    export EDITOR='nano'
+fi
 #endregion
 #region Late commands
 if command -v zoxide >/dev/null 2>&1; then
