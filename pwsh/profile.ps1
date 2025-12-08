@@ -90,6 +90,13 @@ if (Get-Command "rg" -ErrorAction Ignore) {
     $rgConfigFile = Join-Path -Path $configRoot -ChildPath ".ripgreprc"
     $env:RIPGREP_CONFIG_PATH = (Get-Item -Force $rgConfigFile).FullName
 }
+
+if (Get-Command "micro" -ErrorAction Ignore) {
+    $env:EDITOR = 'micro'
+}
+elseif (Get-Command "nano" -ErrorAction Ignore) {
+    $env:EDITOR = 'nano'
+}
 #endregion
 #region Extensibility
 $modulesDir = "$PSScriptRoot/modules"
