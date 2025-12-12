@@ -70,6 +70,10 @@ if command -v rg >/dev/null 2>&1; then
     export RIPGREP_CONFIG_PATH="$rgConfigFile"
 fi
 
+if [[ -z $LESSOPEN ]] && [[ -x /usr/bin/lesspipe ]]; then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
+
 if command -v micro >/dev/null 2>&1; then
     export EDITOR='micro'
 elif command -v nano >/dev/null 2>&1; then
