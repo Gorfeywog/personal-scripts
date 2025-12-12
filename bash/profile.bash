@@ -55,7 +55,7 @@ else
     prompt_core="\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]"
 fi
 
-export PS1="\[\e]0;${title}\a\]${debian_chroot:+($debian_chroot)}${prompt_core}\\$ "
+export PS1="\[\e]0;${title}\a\]${prompt_core}\\$ "
 #endregion
 #region App options and aliases
 configRoot="$(realpath "$SCRIPT_DIR/../config/")"
