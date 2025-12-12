@@ -79,6 +79,17 @@ if command -v micro >/dev/null 2>&1; then
 elif command -v nano >/dev/null 2>&1; then
     export EDITOR='nano'
 fi
+
+if [ -x /usr/bin/dircolors ]; then
+    if [[ -r /etc/dircolors ]]; then
+        eval "$(dircolors -b /etc/dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+fi
 #endregion
 #region Late commands
 if command -v zoxide >/dev/null 2>&1; then
