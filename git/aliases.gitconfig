@@ -2,6 +2,8 @@
     logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     ll = logline
     fp = push --force-with-lease
+    flunge = "!git fetch && git reset --hard @{upstream}"
+    flups = "!git fetch && git reset --hard @{push}"
     branch-status = "!f() { \
         branch_name=$(git rev-parse --abbrev-ref --verify --quiet \"${1}\"); \
         if [ -z \"${branch_name}\" ]; then \

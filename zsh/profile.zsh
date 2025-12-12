@@ -71,10 +71,25 @@ if command -v rg >/dev/null 2>&1; then
     export RIPGREP_CONFIG_PATH="$rgConfigFile"
 fi
 
+if [[ -z ${LESSOPEN:-} ]] && [[ -x /usr/bin/lesspipe ]]; then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
+
 if command -v micro >/dev/null 2>&1; then
     export EDITOR='micro'
 elif command -v nano >/dev/null 2>&1; then
     export EDITOR='nano'
+fi
+
+if command -v dircolors >/dev/null 2>&1; then
+    if [[ -r /etc/dircolors ]]; then
+        eval "$(dircolors -b /etc/dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
 fi
 #endregion
 #region Late commands
