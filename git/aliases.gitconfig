@@ -1,5 +1,5 @@
 [alias]
-    logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    logline = log --graph --pretty=format:'%h -%C(yellow)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     ll = logline
     ff = pull --ff-only --autostash
     p = push --no-force-with-lease
